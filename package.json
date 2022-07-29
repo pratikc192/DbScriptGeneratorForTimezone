@@ -1,0 +1,20 @@
+{
+  "name": "DbScriptGeneratorForTimezone",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^3.2.9",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "g-sheets-api": "^2.1.2"
+  }
+}
