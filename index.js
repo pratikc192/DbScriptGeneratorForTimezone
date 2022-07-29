@@ -25,7 +25,7 @@ parseExcel("demo.xlsx").forEach(async (element) => {
     timezone = await getTimezone(url);
     //console.log(data.resourceSets[0].resources[0].timeZoneAtLocation[0].timeZone[0].ianaTimeZoneId);
     console.log('\n' + cityState +', timezone=' + timezone + ' where id='+ id + '\n');
-    sqlQueries = 'update segway.clinic set timezone="' + timezone + '" where id="' + id + '";' + '\n' + sqlQueries;
+    sqlQueries = "update segway.clinic set timezone='" + timezone + "' where id=" + id + ";" + "\n" + sqlQueries;
   }
 
   writeToFile(sqlQueries);
