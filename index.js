@@ -14,17 +14,21 @@ const parseExcel = (filename) => {
   }));
 };
 
-parseExcel("dbDataLab.xlsx").forEach(async (element) => {
+parseExcel("dbDataClinic.xlsx").forEach(async (element) => {
   //console.log(element.data);
   let cityState='', id='', url='', timezone='', sqlQueries='';
   for(let clinic of element.data){
     id = clinic.id;
-    cityState = clinic.premises_city + ', ' + clinic.premises_state;
+    cityState = clinic.city + ', ' + clinic.state;
     url='https://dev.virtualearth.net/REST/v1/TimeZone/?query='+cityState+'&key=Auca4p_exxDUrZg0DodpLkAcVn2f-rhLk4gOXVXgf0flh78F6qiWE0kmWVzgDJ0b';
     console.log(url);
-    timezone = await getTimezone(url);
-    console.log("update segway.lab set timezone='" + timezone + "' where id=" + id + ";" + "\n");
-    sqlQueries = "update segway.lab set timezone='" + timezone + "' where id=" + id + ";" + "\n" + sqlQueries;
+    try{
+      timezone = await getTimezone(url);
+    } catch (e) {
+      console.error(e);
+    }
+    console.log("update segway.clinic set timezone='" + timezone + "' where id=" + id + ";" + "\n");
+    sqlQueries = "update segway.clinic set timezone='" + timezone + "' where id=" + id + ";" + "\n" + sqlQueries;
   }
 
   writeToFile(sqlQueries);
