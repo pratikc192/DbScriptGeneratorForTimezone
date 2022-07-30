@@ -1,4 +1,0 @@
-update segway.clinic set timezone='America/Chicago' where id=109742;
-update segway.clinic set timezone='America/Chicago' where id=105515;
-update segway.clinic set timezone='America/Denver' where id=107156;
-update segway.clinic set timezone='America/New_York' where id=111170;
