@@ -30,7 +30,7 @@ function parseExcel(filename){
       name,
       data: XLSX.utils.sheet_to_json(excelData.Sheets[name]),
   }));
-};
+}
 
 async function getTimezone(cityAndState){
   let url = apiUrl + '?key=' + apiKey + '&query=' + cityAndState;
