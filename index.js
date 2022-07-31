@@ -4,37 +4,37 @@ import * as XLSX from 'xlsx/xlsx.mjs';
 import * as fs from 'fs';
 XLSX.set_fs(fs);
 
-const parseExcel = (filename) => {
+const apiUrl = 'https://dev.virtualearth.net/REST/v1/TimeZone/';
+const apiKey = 'Auca4p_exxDUrZg0DodpLkAcVn2f-rhLk4gOXVXgf0flh78F6qiWE0kmWVzgDJ0b';
 
+parseExcel("demo.xlsx").forEach(async (element) => {
+  //console.log(element.data);
+  let cityAndState='', timezone='', sqlQueries='';
+  for(let clinic of element.data){
+    cityAndState = clinic.city + ', ' + clinic.state;
+    try{
+      timezone = await getTimezone(cityAndState);
+    } catch (e){
+      console.error(e);
+    }
+    console.log("update segway.clinic set timezone='" + timezone + "' where id=" + clinic.id + ";" + "\n");
+    sqlQueries = "update segway.clinic set timezone='" + timezone + "' where id=" + clinic.id + ";" + "\n" + sqlQueries;
+  }
+
+  writeToFile(sqlQueries);
+});
+
+function parseExcel(filename){
   const excelData = XLSX.readFile(filename);
-
   return Object.keys(excelData.Sheets).map(name => ({
       name,
       data: XLSX.utils.sheet_to_json(excelData.Sheets[name]),
   }));
 };
 
-parseExcel("dbDataClinic.xlsx").forEach(async (element) => {
-  //console.log(element.data);
-  let cityState='', id='', url='', timezone='', sqlQueries='';
-  for(let clinic of element.data){
-    id = clinic.id;
-    cityState = clinic.city + ', ' + clinic.state;
-    url='https://dev.virtualearth.net/REST/v1/TimeZone/?query='+cityState+'&key=Auca4p_exxDUrZg0DodpLkAcVn2f-rhLk4gOXVXgf0flh78F6qiWE0kmWVzgDJ0b';
-    console.log(url);
-    try{
-      timezone = await getTimezone(url);
-    } catch (e) {
-      console.error(e);
-    }
-    console.log("update segway.clinic set timezone='" + timezone + "' where id=" + id + ";" + "\n");
-    sqlQueries = "update segway.clinic set timezone='" + timezone + "' where id=" + id + ";" + "\n" + sqlQueries;
-  }
-
-  writeToFile(sqlQueries);
-});
-
-async function getTimezone(url){
+async function getTimezone(cityAndState){
+  let url = apiUrl + '?key=' + apiKey + '&query=' + cityAndState;
+  console.log(url);
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
